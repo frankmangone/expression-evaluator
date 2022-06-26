@@ -1,4 +1,5 @@
 import { Token } from '../types/token'
+import createToken from './create-token'
 
 enum ECharType {
   SYMBOL,
@@ -26,12 +27,12 @@ const parseExpression = (expression: string): Token[] => {
     }
 
     // Else, move buffer content into a new symbol, and reset buffer to new symbol
-    tokens.push(buffer.join(''))
+    tokens.push(createToken(buffer.join('')))
     buffer = [char]
   }
 
   // Buffer now contains the last token
-  tokens.push(buffer.join(''))
+  tokens.push(createToken(buffer.join('')))
 
   return tokens
 }
