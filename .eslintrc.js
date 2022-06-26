@@ -20,7 +20,6 @@ module.exports = {
     'semi': 'off',
     'indent': 'off',
     'quotes': ['error', 'single'],
-    'no-console': ['error', { allow: ['warn', 'error'] }],
     'no-var': 'error',
     'no-undef': 'error',
     'no-empty-pattern': 'off',
