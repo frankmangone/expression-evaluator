@@ -1,3 +1,5 @@
+import { Token } from '../types/token'
+
 enum ECharType {
   SYMBOL,
   LETTER,
@@ -5,9 +7,9 @@ enum ECharType {
   EMPTY,
 }
 
-const parseExpression = (expression: string): string[] => {
+const parseExpression = (expression: string): Token[] => {
   let buffer = [expression[0]]
-  const tokens = []
+  const tokens: Token[] = []
 
   for (let i = 1; i < expression.length; i++) {
     // Need to check what's currently in the buffer - specifically, the *type* of what's stored there.
