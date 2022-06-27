@@ -10,7 +10,7 @@ const assertKey = (expected: Token[], received: Token[], key: string) => {
 describe('[func] parseExpression', () => {
   describe('Feature: Correctly parses valid expressions', () => {
     //
-    it('Expression: "2+p-m"', () => {
+    it('Scenario: Simple expression w/o parenthesis: "2+p-m"', () => {
       const tokens = parseExpression('2+p-m')
 
       const expectedTokens = [
@@ -26,7 +26,7 @@ describe('[func] parseExpression', () => {
     })
 
     //
-    it('Expression: "(2+p)*m"', () => {
+    it('Scenario: Expression with parenthesis: "(2+p)*m"', () => {
       const tokens = parseExpression('(2+p)*m')
 
       const expectedTokens = [
@@ -44,7 +44,7 @@ describe('[func] parseExpression', () => {
     })
 
     //
-    it('Expression: "((2+p)/(3-m_a))"', () => {
+    it('Scenario: Params with underscores: "((2+p)/(3-m_a))"', () => {
       const tokens = parseExpression('((2+p)/(3-m_a))')
 
       const expectedTokens = [
@@ -65,6 +65,19 @@ describe('[func] parseExpression', () => {
 
       assertKey(expectedTokens, tokens, 'value')
       assertKey(expectedTokens, tokens, 'type')
+    })
+  })
+
+  //
+  describe('Feature: Fails to parse for invalid expressions', () => {
+    //
+    it('Scenario: Parameter starting with number (invalid): "2-1_a"', () => {
+      expect(() => parseExpression('2-1_a')).toThrow()
+    })
+
+    //
+    it('Scenario: Parameter starting with underscore (invalid): "_a_b+3"', () => {
+      expect(() => parseExpression('_a_b+3')).toThrow()
     })
   })
 })
