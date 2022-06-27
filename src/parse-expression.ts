@@ -1,4 +1,4 @@
-import { Token } from '../types/token'
+import { Token, EChars } from '../types/token'
 import createToken from './create-token'
 
 enum ECharType {
@@ -12,11 +12,22 @@ const parseExpression = (expression: string): Token[] => {
   let buffer = [expression[0]]
   const tokens: Token[] = []
 
+  const popBuffer = () => {
+    if (buffer.length > 0) tokens.push(createToken(buffer.join('')))
+  }
+
   for (let i = 1; i < expression.length; i++) {
     // Need to check what's currently in the buffer - specifically, the *type* of what's stored there.
-    const char = expression[i]
-    const bufferTail = buffer[buffer.length - 1] // Resolves to `undefined` if buffer is empty
+    const char: string = expression[i]
 
+    // If new character is a left or right parenthesis, then pop the buffer and also add the parenthesis token
+    if (char === EChars.LEFT_PARENTHESIS || char === EChars.RIGHT_PARENTHESIS) {
+      popBuffer()
+      tokens.push(createToken(char))
+      buffer = []
+    }
+
+    const bufferTail = buffer[buffer.length - 1] // Resolves to `undefined` if buffer is empty
     const bufferTailType = getCharType(bufferTail)
     const currentSymbolType = getCharType(char)
 
@@ -27,12 +38,12 @@ const parseExpression = (expression: string): Token[] => {
     }
 
     // Else, move buffer content into a new symbol, and reset buffer to new symbol
-    tokens.push(createToken(buffer.join('')))
+    popBuffer()
     buffer = [char]
   }
 
   // Buffer now contains the last token
-  tokens.push(createToken(buffer.join('')))
+  popBuffer()
 
   return tokens
 }
@@ -40,6 +51,7 @@ const parseExpression = (expression: string): Token[] => {
 export default parseExpression
 
 const getCharType = (char: string): ECharType => {
+  if (char === undefined) return ECharType.EMPTY
   if (isNumber(char)) return ECharType.NUMBER
   if (isLetter(char)) return ECharType.LETTER
   return ECharType.SYMBOL

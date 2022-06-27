@@ -1,4 +1,4 @@
-import { Token, ETokenType } from '../types/Token'
+import { Token, ETokenType, EChars } from '../types/Token'
 
 const createToken = (value: string): Token => {
   return {
@@ -10,6 +10,8 @@ const createToken = (value: string): Token => {
 export default createToken
 
 export const getTokenType = (value: string): ETokenType => {
+  if (value === EChars.LEFT_PARENTHESIS) return ETokenType.LEFT_PARENTHESIS
+  if (value === EChars.RIGHT_PARENTHESIS) return ETokenType.RIGHT_PARENTHESIS
   if (isNumber(value)) return ETokenType.NUMBER
   if (isText(value)) return ETokenType.PARAMETER
   return ETokenType.OPERATOR

@@ -11,3 +11,8 @@ export interface Token {
   value: string
   type: ETokenType
 }
+
+export enum EChars {
+  LEFT_PARENTHESIS = '(',
+  RIGHT_PARENTHESIS = ')',
+}
