@@ -25,6 +25,7 @@ const parseExpression = (expression: string): Token[] => {
       popBuffer()
       tokens.push(createToken(char))
       buffer = []
+      continue
     }
 
     const bufferTail = buffer[buffer.length - 1] // Resolves to `undefined` if buffer is empty
