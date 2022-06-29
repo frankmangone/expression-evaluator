@@ -28,6 +28,16 @@ const parseExpression = (expression: string): Token[] => {
       continue
     }
 
+    // If char is an underscore, we must check that the buffer is a valid variable
+    if (char === EChars.UNDERSCORE) {
+      if (isLetter(buffer[0]) && buffer[-1] !== EChars.UNDERSCORE) {
+        buffer.push(char)
+        continue
+      } else {
+        throw new Error('Invalid parameter @ line') // TODO: Better error reporting
+      }
+    }
+
     const bufferTail = buffer[buffer.length - 1] // Resolves to `undefined` if buffer is empty
     const bufferTailType = getCharType(bufferTail)
     const currentSymbolType = getCharType(char)
