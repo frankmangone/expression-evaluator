@@ -19,6 +19,7 @@ const parseExpression = (expression: string): Token[] => {
   for (let i = 1; i < expression.length; i++) {
     // Need to check what's currently in the buffer - specifically, the *type* of what's stored there.
     const char: string = expression[i]
+    const bufferTail = buffer[buffer.length - 1] // Resolves to `undefined` if buffer is empty
 
     // If new character is a left or right parenthesis, then pop the buffer and also add the parenthesis token
     if (char === EChars.LEFT_PARENTHESIS || char === EChars.RIGHT_PARENTHESIS) {
@@ -28,9 +29,28 @@ const parseExpression = (expression: string): Token[] => {
       continue
     }
 
-    const bufferTail = buffer[buffer.length - 1] // Resolves to `undefined` if buffer is empty
+    // If char is an underscore, we must check that the buffer is a valid variable
+    if (char === EChars.UNDERSCORE) {
+      if (isLetter(buffer[0]) && bufferTail !== EChars.UNDERSCORE) {
+        buffer.push(char)
+        continue
+      } else {
+        throw new Error('Invalid parameter @ line') // TODO: Better error reporting
+      }
+    }
+
     const bufferTailType = getCharType(bufferTail)
     const currentSymbolType = getCharType(char)
+
+    // If the last symbol in buffer is an underscore and we have a letter,
+    // we're ok pushing to buffer
+    if (
+      currentSymbolType === ECharType.LETTER &&
+      bufferTail === EChars.UNDERSCORE
+    ) {
+      buffer.push(char)
+      continue
+    }
 
     if (bufferTailType === currentSymbolType) {
       // Accumulating in buffer

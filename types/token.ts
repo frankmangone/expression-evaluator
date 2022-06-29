@@ -15,4 +15,5 @@ export interface Token {
 export enum EChars {
   LEFT_PARENTHESIS = '(',
   RIGHT_PARENTHESIS = ')',
+  UNDERSCORE = '_',
 }
