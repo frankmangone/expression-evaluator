@@ -16,4 +16,4 @@ jobs:
         uses: actions/setup-node@v2
 
       - name: Run jest
-        run: npm run jest
+        run: npm run test
